@@ -7,8 +7,8 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Plus } from "lucide-react";
-import { useToast } from "@/components/hooks/use-toast"
+import { ArrowDown, ArrowUp, Plus } from "lucide-react";
+import { useToast } from "@/components/hooks/use-toast";
 
 const Watchlist = () => {
   const { toast } = useToast();
@@ -94,8 +94,15 @@ function WatchlistItem({
       <div className="text-right">
         <div className="font-medium">{price}</div>
         <div
-          className={`text-xs ${negative ? "text-red-600" : "text-green-600"}`}
+          className={`flex justify-end items-center text-xs text-right gap-1 ${
+            negative ? "text-red-600" : "text-green-600"
+          }`}
         >
+          {negative ? (
+            <ArrowDown className="h-3 w-3" />
+          ) : (
+            <ArrowUp className="h-3 w-3" />
+          )}
           {change}
         </div>
       </div>

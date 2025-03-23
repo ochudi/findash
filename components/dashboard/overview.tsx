@@ -50,7 +50,7 @@ function MarketIndex({
       <div className="text-s text-muted-foreground">{name}</div>
       <div className="font-bold text-lg">{value}</div>
       <div
-        className={`text-xs flex items-center ${
+        className={`text-xs flex items-center gap-1 ${
           negative ? "text-red-600" : "text-green-600"
         }`}
       >

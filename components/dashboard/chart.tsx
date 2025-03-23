@@ -50,11 +50,11 @@ export function StockChart() {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <div className="w-full h-[260px] pr-10 mt-3">
+        <div className="w-full h-[260px] mt-3">
           <ChartContainer config={chartConfig} className="h-full w-full">
             <AreaChart
               data={chartData}
-              margin={{ left: 12, right: 12, bottom: 20 }}
+              margin={{ left: -20, right: 20, bottom: 20 }}
             >
               <CartesianGrid vertical={true} strokeDasharray="3 3" />
               <XAxis

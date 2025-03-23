@@ -5,6 +5,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { ArrowDown, ArrowUp } from "lucide-react";
 
 const Stocks = () => {
   return (
@@ -19,10 +20,10 @@ const Stocks = () => {
             <thead className="bg-table-header text-xs">
               <tr>
                 <th className="text-left p-3 font-medium">Name</th>
-                <th className="text-right p-3 font-medium">Price</th>
-                <th className="text-right p-3 font-medium">Change</th>
-                <th className="text-right p-3 font-medium">% Change</th>
-                <th className="text-right p-3 font-medium">Volume</th>
+                <th className="text-left p-3 font-medium">Price</th>
+                <th className="text-left p-3 font-medium">Change</th>
+                <th className="text-left p-3 font-medium">% Change</th>
+                <th className="text-left p-3 font-medium">Volume</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-border">
@@ -96,25 +97,30 @@ const StockRow = ({
   return (
     <tr className="hover:bg-muted/50">
       <td className="p-3">
-        <div className="font-medium">{name}</div>
+        <div className="font-medium w-[160px]">{name}</div>
         <div className="text-xs text-muted-foreground">{symbol}</div>
       </td>
-      <td className="p-3 text-right">{price}</td>
+      <td className="p-3 text-left">{price}</td>
       <td
-        className={`p-3 text-right ${
-          negative ? "text-danger" : "text-success"
+        className={`p-3 text-left ${
+          negative ? "text-red-600" : "text-green-600"
         }`}
       >
         {change}
       </td>
       <td
-        className={`p-3 text-right ${
-          negative ? "text-danger" : "text-success"
+        className={`p-5 flex gap-1 items-center text-left ${
+          negative ? "text-red-600" : "text-green-600"
         }`}
       >
+        {negative ? (
+          <ArrowDown className="h-3 w-3" />
+        ) : (
+          <ArrowUp className="h-3 w-3" />
+        )}
         {percentChange}
       </td>
-      <td className="p-3 text-right">{volume}</td>
+      <td className="p-3 text-left">{volume}</td>
     </tr>
   );
 };
