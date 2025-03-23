@@ -1,14 +1,13 @@
 "use client";
 
 import type React from "react";
-import { Plus } from "lucide-react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { HeaderTitle } from "./general/header-title";
 import Overview from "./dashboard/overview";
 import Watchlist from "./dashboard/watchlist";
 import { StockChart } from "./dashboard/chart";
+import Stocks from "./dashboard/stocks";
+import Crypto from "./dashboard/crypto";
 
 const Dashboard = () => {
   return (
@@ -26,139 +25,10 @@ const Dashboard = () => {
               <StockChart />
             </div>
             <Watchlist />
+            <Stocks />
+            <Crypto />
           </div>
-
-          {/* Stocks Section */}
-          <div className="mt-6">
-            <h2 className="text-lg font-semibold mb-1">Stocks</h2>
-            <p className="text-xs text-muted-foreground mb-4">
-              Top performing stocks today
-            </p>
-
-            <div className="overflow-x-auto">
-              <table className="w-full">
-                <thead className="bg-table-header text-xs">
-                  <tr>
-                    <th className="text-left p-3 font-medium">Name</th>
-                    <th className="text-right p-3 font-medium">Price</th>
-                    <th className="text-right p-3 font-medium">Change</th>
-                    <th className="text-right p-3 font-medium">% Change</th>
-                    <th className="text-right p-3 font-medium">Volume</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-border">
-                  <StockRow
-                    name="Apple Inc."
-                    symbol="AAPL"
-                    price="$197.57"
-                    change="+$1.23"
-                    percentChange="+0.63%"
-                    volume="58.7M"
-                  />
-                  <StockRow
-                    name="Microsoft Corporation"
-                    symbol="MSFT"
-                    price="$392.30"
-                    change="+$3.45"
-                    percentChange="+0.89%"
-                    volume="23.4M"
-                  />
-                  <StockRow
-                    name="Alphabet Inc."
-                    symbol="GOOGL"
-                    price="$187.57"
-                    change="-$0.89"
-                    percentChange="-0.47%"
-                    volume="19.2M"
-                    negative
-                  />
-                  <StockRow
-                    name="Amazon.com, Inc."
-                    symbol="AMZN"
-                    price="$153.42"
-                    change="+$2.31"
-                    percentChange="+1.53%"
-                    volume="32.1M"
-                  />
-                  <StockRow
-                    name="Tesla, Inc."
-                    symbol="TSLA"
-                    price="$238.83"
-                    change="-$3.76"
-                    percentChange="-1.55%"
-                    volume="94.3M"
-                    negative
-                  />
-                </tbody>
-              </table>
-            </div>
-          </div>
-
-          {/* Cryptocurrencies Section */}
-          <div className="mt-6">
-            <h2 className="text-lg font-semibold mb-1">Cryptocurrencies</h2>
-            <p className="text-xs text-muted-foreground mb-4">
-              Top cryptocurrencies by market cap
-            </p>
-
-            <div className="overflow-x-auto">
-              <table className="w-full">
-                <thead className="bg-table-header text-xs">
-                  <tr>
-                    <th className="text-left p-3 font-medium">Name</th>
-                    <th className="text-right p-3 font-medium">Price</th>
-                    <th className="text-right p-3 font-medium">24h Change</th>
-                    <th className="text-right p-3 font-medium">Market Cap</th>
-                    <th className="text-right p-3 font-medium">Volume (24h)</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-border">
-                  <CryptoRow
-                    name="Bitcoin"
-                    symbol="BTC"
-                    price="$42,637.30"
-                    change="+2.14%"
-                    marketCap="$834.5B"
-                    volume="$28.9B"
-                  />
-                  <CryptoRow
-                    name="Ethereum"
-                    symbol="ETH"
-                    price="$2,274.16"
-                    change="+1.87%"
-                    marketCap="$273.2B"
-                    volume="$15.7B"
-                  />
-                  <CryptoRow
-                    name="Binance Coin"
-                    symbol="BNB"
-                    price="$307.42"
-                    change="-0.53%"
-                    marketCap="$47.3B"
-                    volume="$1.2B"
-                    negative
-                  />
-                  <CryptoRow
-                    name="Solana"
-                    symbol="SOL"
-                    price="$102.83"
-                    change="+4.62%"
-                    marketCap="$44.1B"
-                    volume="$3.8B"
-                  />
-                  <CryptoRow
-                    name="Cardano"
-                    symbol="ADA"
-                    price="$0.58"
-                    change="-1.24%"
-                    marketCap="$20.5B"
-                    volume="$0.9B"
-                    negative
-                  />
-                </tbody>
-              </table>
-            </div>
-          </div>
+          
 
           {/* Market News Section */}
           <div className="mt-6">
@@ -227,86 +97,6 @@ function NavItem({
       {icon}
       {label}
     </Link>
-  );
-}
-
-function StockRow({
-  name,
-  symbol,
-  price,
-  change,
-  percentChange,
-  volume,
-  negative = false,
-}: {
-  name: string;
-  symbol: string;
-  price: string;
-  change: string;
-  percentChange: string;
-  volume: string;
-  negative?: boolean;
-}) {
-  return (
-    <tr className="hover:bg-muted/50">
-      <td className="p-3">
-        <div className="font-medium">{name}</div>
-        <div className="text-xs text-muted-foreground">{symbol}</div>
-      </td>
-      <td className="p-3 text-right">{price}</td>
-      <td
-        className={`p-3 text-right ${
-          negative ? "text-danger" : "text-success"
-        }`}
-      >
-        {change}
-      </td>
-      <td
-        className={`p-3 text-right ${
-          negative ? "text-danger" : "text-success"
-        }`}
-      >
-        {percentChange}
-      </td>
-      <td className="p-3 text-right">{volume}</td>
-    </tr>
-  );
-}
-
-function CryptoRow({
-  name,
-  symbol,
-  price,
-  change,
-  marketCap,
-  volume,
-  negative = false,
-}: {
-  name: string;
-  symbol: string;
-  price: string;
-  change: string;
-  marketCap: string;
-  volume: string;
-  negative?: boolean;
-}) {
-  return (
-    <tr className="hover:bg-muted/50">
-      <td className="p-3">
-        <div className="font-medium">{name}</div>
-        <div className="text-xs text-muted-foreground">{symbol}</div>
-      </td>
-      <td className="p-3 text-right">{price}</td>
-      <td
-        className={`p-3 text-right ${
-          negative ? "text-danger" : "text-success"
-        }`}
-      >
-        {change}
-      </td>
-      <td className="p-3 text-right">{marketCap}</td>
-      <td className="p-3 text-right">{volume}</td>
-    </tr>
   );
 }
 
