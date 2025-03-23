@@ -1,16 +1,25 @@
 import React from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Plus } from "lucide-react";
+import { useToast } from "@/components/hooks/use-toast"
 
 const Watchlist = () => {
+  const { toast } = useToast();
+
   return (
     <Card>
-      <CardHeader className="pb-2">
-        <CardTitle className="text-lg">Watchlist</CardTitle>
-        <p className="text-xs text-muted-foreground">
-          Track your favorite assets
-        </p>
+      <CardHeader>
+        <CardTitle>Watchlist</CardTitle>
+        <CardDescription>Track your favorite assets</CardDescription>
       </CardHeader>
-      <CardContent>
+      <CardContent className="m-1">
         <div className="space-y-4">
           <WatchlistItem
             name="Apple Inc."
@@ -43,8 +52,21 @@ const Watchlist = () => {
             price="$153.42"
             change="+1.53%"
           />
-
         </div>
+
+        <Button
+          variant="outline"
+          className="w-full flex items-center justify-center gap-1 mt-10"
+          onClick={() => {
+            toast({
+              title: "Watchlist Empty",
+              description: "There's nothing to add yet. Try again later!",
+            });
+          }}
+        >
+          <Plus className="h-4 w-4" />
+          Add to Watchlist
+        </Button>
       </CardContent>
     </Card>
   );
@@ -71,7 +93,9 @@ function WatchlistItem({
       </div>
       <div className="text-right">
         <div className="font-medium">{price}</div>
-        <div className={`text-xs ${negative ? "text-danger" : "text-success"}`}>
+        <div
+          className={`text-xs ${negative ? "text-red-600" : "text-green-600"}`}
+        >
           {change}
         </div>
       </div>

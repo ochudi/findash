@@ -10,10 +10,9 @@ import Overview from "./dashboard/overview";
 import Watchlist from "./dashboard/watchlist";
 import { StockChart } from "./dashboard/chart";
 
-export default function Dashboard() {
+const Dashboard = () => {
   return (
     <div className="flex w-full h-screen bg-background">
-      {/* Main Content */}
       <div className="flex-1 overflow-auto">
         <div className="p-6">
           <HeaderTitle
@@ -26,11 +25,7 @@ export default function Dashboard() {
               <Overview />
               <StockChart />
             </div>
-
-            {/* Watchlist */}
             <Watchlist />
-
-            {/* News */}
           </div>
 
           {/* Stocks Section */}
@@ -209,7 +204,7 @@ export default function Dashboard() {
       </div>
     </div>
   );
-}
+};
 
 function NavItem({
   icon,
@@ -339,3 +334,5 @@ function NewsItem({
     </div>
   );
 }
+
+export default Dashboard;

@@ -1,20 +1,22 @@
 import React from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { ChevronDown, ChevronUp } from "lucide-react";
-import Image from "next/image";
-import { StockChart } from "./chart";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { ArrowDown, ArrowUp } from "lucide-react";
 
 const Overview = () => {
   return (
     <Card className="md:col-span-2">
-      <CardHeader className="pb-2">
-        <CardTitle className="text-lg">Market Overview</CardTitle>
-        <p className="text-xs text-muted-foreground">
-          Live market indices and commodities
-        </p>
+      <CardHeader>
+        <CardTitle>Market Overview</CardTitle>
+        <CardDescription>Live market indices and commodities</CardDescription>
       </CardHeader>
       <CardContent>
-        <div className="grid grid-cols-3 gap-4">
+        <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-4">
           <MarketIndex name="S&P 500" value="4,587.64" change="+0.83%" />
           <MarketIndex name="Dow Jones" value="37,306.02" change="+0.86%" />
           <MarketIndex
@@ -45,17 +47,17 @@ function MarketIndex({
 }) {
   return (
     <div className="space-y-1">
-      <div className="text-xs text-muted-foreground">{name}</div>
-      <div className="font-medium">{value}</div>
+      <div className="text-s text-muted-foreground">{name}</div>
+      <div className="font-bold text-lg">{value}</div>
       <div
         className={`text-xs flex items-center ${
-          negative ? "text-danger" : "text-success"
+          negative ? "text-red-600" : "text-green-600"
         }`}
       >
         {negative ? (
-          <ChevronDown className="h-3 w-3" />
+          <ArrowDown className="h-3 w-3" />
         ) : (
-          <ChevronUp className="h-3 w-3" />
+          <ArrowUp className="h-3 w-3" />
         )}
         {change}
       </div>

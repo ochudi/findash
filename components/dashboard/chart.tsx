@@ -56,7 +56,7 @@ export function StockChart() {
               data={chartData}
               margin={{ left: 12, right: 12, bottom: 20 }}
             >
-              <CartesianGrid vertical={false} strokeDasharray="3 3" />
+              <CartesianGrid vertical={true} strokeDasharray="3 3" />
               <XAxis
                 dataKey="month"
                 tickLine={false}

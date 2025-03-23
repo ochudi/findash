@@ -3,6 +3,7 @@ import "./globals.css";
 
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/app-sidebar";
+import { Toaster } from "@/components/ui/toaster";
 
 export const metadata: Metadata = {
   title: "Fin Dash",
@@ -19,6 +20,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
           <main className="w-screen h-screen overflow-hidden">
             <SidebarTrigger />
             {children}
+            <Toaster />
           </main>
         </SidebarProvider>
       </body>
