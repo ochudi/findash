@@ -1,12 +1,14 @@
 "use client";
 
 import type React from "react";
-import { ChevronUp, ChevronDown, Plus } from "lucide-react";
+import { Plus } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import Image from "next/image";
 import Link from "next/link";
 import { HeaderTitle } from "./general/header-title";
+import Overview from "./dashboard/overview";
+import Watchlist from "./dashboard/watchlist";
+import { StockChart } from "./dashboard/chart";
 
 export default function Dashboard() {
   return (
@@ -20,133 +22,15 @@ export default function Dashboard() {
           />
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {/* Market Overview */}
-            <Card className="md:col-span-2">
-              <CardHeader className="pb-2">
-                <CardTitle className="text-lg">Market Overview</CardTitle>
-                <p className="text-xs text-muted-foreground">
-                  Live market indices and commodities
-                </p>
-              </CardHeader>
-              <CardContent>
-                <div className="grid grid-cols-3 gap-4">
-                  <MarketIndex
-                    name="S&P 500"
-                    value="4,587.64"
-                    change="+0.83%"
-                  />
-                  <MarketIndex
-                    name="Dow Jones"
-                    value="37,306.02"
-                    change="+0.86%"
-                  />
-                  <MarketIndex
-                    name="Nasdaq"
-                    value="14,403.97"
-                    change="-0.23%"
-                    negative
-                  />
-                  <MarketIndex
-                    name="Bitcoin"
-                    value="$42,637.30"
-                    change="+2.14%"
-                  />
-                  <MarketIndex
-                    name="Ethereum"
-                    value="$2,274.16"
-                    change="+1.87%"
-                  />
-                  <MarketIndex
-                    name="Gold"
-                    value="$2,032.30"
-                    change="-0.12%"
-                    negative
-                  />
-                </div>
-
-                <div className="mt-8">
-                  <div className="flex items-center justify-between mb-2">
-                    <div>
-                      <h3 className="font-semibold">Apple Inc.</h3>
-                      <div className="flex items-center gap-2">
-                        <span className="text-lg font-medium">$197.57</span>
-                        <span className="text-xs text-success flex items-center">
-                          <ChevronUp className="h-3 w-3" />
-                          +1.23 (+0.63%)
-                        </span>
-                      </div>
-                    </div>
-                    <div className="flex gap-2 text-xs">
-                      <span className="bg-muted px-2 py-1 rounded">AAPL</span>
-                      <span className="bg-muted px-2 py-1 rounded">MSFT</span>
-                      <span className="bg-muted px-2 py-1 rounded">GOOGL</span>
-                    </div>
-                  </div>
-
-                  <div className="h-40 w-full relative mt-4">
-                    <Image
-                      src="/placeholder.svg?height=160&width=600"
-                      alt="Apple stock chart"
-                      fill
-                      className="object-cover"
-                    />
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
+            <div className="flex flex-col md:col-span-2 gap-2">
+              <Overview />
+              <StockChart />
+            </div>
 
             {/* Watchlist */}
-            <Card>
-              <CardHeader className="pb-2">
-                <CardTitle className="text-lg">Watchlist</CardTitle>
-                <p className="text-xs text-muted-foreground">
-                  Track your favorite assets
-                </p>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  <WatchlistItem
-                    name="Apple Inc."
-                    symbol="AAPL"
-                    price="$197.57"
-                    change="+0.63%"
-                  />
-                  <WatchlistItem
-                    name="Tesla, Inc."
-                    symbol="TSLA"
-                    price="$238.83"
-                    change="-1.55%"
-                    negative
-                  />
-                  <WatchlistItem
-                    name="Bitcoin"
-                    symbol="BTC"
-                    price="$42,637.30"
-                    change="+2.14%"
-                  />
-                  <WatchlistItem
-                    name="Ethereum"
-                    symbol="ETH"
-                    price="$2,274.16"
-                    change="+1.87%"
-                  />
-                  <WatchlistItem
-                    name="Amazon.com, Inc."
-                    symbol="AMZN"
-                    price="$153.42"
-                    change="+1.53%"
-                  />
+            <Watchlist />
 
-                  <Button
-                    variant="outline"
-                    className="w-full flex items-center justify-center gap-1 mt-4"
-                  >
-                    <Plus className="h-4 w-4" />
-                    Add to Watchlist
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
+            {/* News */}
           </div>
 
           {/* Stocks Section */}
@@ -348,66 +232,6 @@ function NavItem({
       {icon}
       {label}
     </Link>
-  );
-}
-
-function MarketIndex({
-  name,
-  value,
-  change,
-  negative = false,
-}: {
-  name: string;
-  value: string;
-  change: string;
-  negative?: boolean;
-}) {
-  return (
-    <div className="space-y-1">
-      <div className="text-xs text-muted-foreground">{name}</div>
-      <div className="font-medium">{value}</div>
-      <div
-        className={`text-xs flex items-center ${
-          negative ? "text-danger" : "text-success"
-        }`}
-      >
-        {negative ? (
-          <ChevronDown className="h-3 w-3" />
-        ) : (
-          <ChevronUp className="h-3 w-3" />
-        )}
-        {change}
-      </div>
-    </div>
-  );
-}
-
-function WatchlistItem({
-  name,
-  symbol,
-  price,
-  change,
-  negative = false,
-}: {
-  name: string;
-  symbol: string;
-  price: string;
-  change: string;
-  negative?: boolean;
-}) {
-  return (
-    <div className="flex justify-between items-center">
-      <div>
-        <div className="font-medium">{name}</div>
-        <div className="text-xs text-muted-foreground">{symbol}</div>
-      </div>
-      <div className="text-right">
-        <div className="font-medium">{price}</div>
-        <div className={`text-xs ${negative ? "text-danger" : "text-success"}`}>
-          {change}
-        </div>
-      </div>
-    </div>
   );
 }
 

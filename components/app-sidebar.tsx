@@ -21,8 +21,9 @@ import {
 } from "@/components/ui/sidebar";
 
 import Link from "next/link";
+import Image from "next/image";
+import logo from "@/public/svg/findash-logo.svg";
 
-// Menu items.
 const items = [
   {
     title: "Overview",
@@ -71,7 +72,9 @@ export function AppSidebar() {
     <Sidebar>
       <SidebarContent>
         <SidebarGroup>
-          <SidebarGroupLabel>Application</SidebarGroupLabel>
+          <SidebarGroupLabel className="mb-8">
+            <Image src={logo} alt="FinDash Logo" width={96} height={24} />
+          </SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {items.map((item) => (
