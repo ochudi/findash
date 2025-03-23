@@ -11,6 +11,14 @@ export const metadata: Metadata = {
   title: "Fin Dash | Financial Dashboard",
   description:
     "Fin Dash is a modern financial dashboard that allows staff to monitor both stock and cryptocurrency prices, trends, and market data in real-time. Stay informed and make smart decisions with real-time insights.",
+  icons: {
+    icon: [
+      { url: "/ico/favicon.ico", media: "(prefers-color-scheme: light)" },
+      { url: "/ico/favicon-light.ico", media: "(prefers-color-scheme: dark)" },
+    ],
+    shortcut: "/ico/favicon.ico",
+    apple: "/ico/favicon-light.ico",
+  },
   keywords: [
     "financial dashboard",
     "stock prices",
