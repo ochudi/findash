@@ -20,7 +20,9 @@ import { Button } from "@/components/ui/button";
 const stockData = {
   AAPL: {
     title: "Apple Inc",
-    description: "Stock price trend for Apple in the last 12 months",
+    lastPrice: 287.92,
+    change: 1.23,
+    percentChange: 10.63,
     data: [
       { month: "Jan", Price: 186 },
       { month: "Feb", Price: 205 },
@@ -38,7 +40,9 @@ const stockData = {
   },
   MSFT: {
     title: "Microsoft Corp",
-    description: "Stock price trend for Microsoft in the last 12 months",
+    lastPrice: 325.62,
+    change: -2.23,
+    percentChange: 2.63,
     data: [
       { month: "Jan", Price: 250 },
       { month: "Feb", Price: 265 },
@@ -56,7 +60,9 @@ const stockData = {
   },
   GOOGL: {
     title: "Alphabet Inc",
-    description: "Stock price trend for Alphabet in the last 12 months",
+    lastPrice: 197.57,
+    change: 1.23,
+    percentChange: 0.63,
     data: [
       { month: "Jan", Price: 140 },
       { month: "Feb", Price: 150 },
@@ -92,17 +98,41 @@ export function StockChart() {
   return (
     <Card>
       <CardHeader>
-        <div className="flex justify-between items-center">
-          <div>
+        <div className="flex justify-between items-center flex-col gap-2 lg:flex-row">
+          <div className="flex flex-col gap-1">
             <CardTitle>{stock.title}</CardTitle>
-            <CardDescription>{stock.description}</CardDescription>
+            <CardDescription>
+              <div className="flex items-center gap-2">
+                <div className="text-lg">${stock.lastPrice}</div>
+                <span
+                  className={`text-sm ${
+                    stock.change >= 0 ? "text-green-600" : "text-red-600"
+                  }`}
+                >
+                  {stock.change >= 0 ? `+${stock.change}` : stock.change}
+                </span>
+                <span
+                  className={`text-sm ${
+                    stock.percentChange >= 0 ? "text-green-600" : "text-red-600"
+                  }`}
+                >
+                  (
+                  {stock.percentChange >= 0
+                    ? `+${stock.percentChange}`
+                    : stock.percentChange}
+                  %)
+                </span>
+              </div>
+            </CardDescription>
           </div>
-          <div className="flex space-x-2">
+          <div className="flex space-x-1 border p-1 rounded-lg bg-gray-100">
             {Object.keys(stockData).map((key) => (
               <Button
                 key={key}
-                variant={selectedStock === key ? "default" : "outline"}
+                variant={selectedStock === key ? "outline" : "secondary"}
                 onClick={() => setSelectedStock(key as keyof typeof stockData)}
+                className="hover:bg-white px-2 py-1"
+                size="sm"
               >
                 {key}
               </Button>

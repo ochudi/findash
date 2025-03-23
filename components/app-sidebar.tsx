@@ -1,3 +1,5 @@
+"use client";
+
 import {
   Briefcase,
   ChartColumn,
@@ -18,11 +20,15 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  useSidebar,
 } from "@/components/ui/sidebar";
 
 import Link from "next/link";
 import Image from "next/image";
 import logo from "@/public/svg/findash-logo.svg";
+
+import { useEffect } from "react";
+import { usePathname } from "next/navigation";
 
 const items = [
   {
@@ -68,6 +74,15 @@ const items = [
 ];
 
 export function AppSidebar() {
+  const { setOpenMobile } = useSidebar();
+  const pathname = usePathname();
+
+  useEffect(() => {
+    if (window.innerWidth < 768) {
+      setOpenMobile(false);
+    }
+  }, [pathname, setOpenMobile]);
+
   return (
     <Sidebar>
       <SidebarContent>
