@@ -22,9 +22,8 @@ export function HeaderTitle({ title, subtitle }: HeaderTitleProps) {
       <div className="flex items-center">
         <Tooltip>
           <TooltipTrigger asChild>
-            <button className="p-1" aria-label="Toggle Dark Mode">
-              <ThemeToggle />
-            </button>
+            {/* Remove the extra button wrapper here */}
+            <ThemeToggle />
           </TooltipTrigger>
           <TooltipContent side="left" align="center">
             Toggle Light/Dark Mode
