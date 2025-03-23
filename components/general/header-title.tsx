@@ -1,3 +1,10 @@
+import { ThemeToggle } from "../theme-toggle";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+
 interface HeaderTitleProps {
   title: string;
   subtitle?: string;
@@ -5,9 +12,25 @@ interface HeaderTitleProps {
 
 export function HeaderTitle({ title, subtitle }: HeaderTitleProps) {
   return (
-    <div className="mb-6">
-      <h1 className="text-2xl font-bold">{title}</h1>
-      {subtitle && <p className="text-muted-foreground text-sm">{subtitle}</p>}
+    <div className="flex justify-between items-center mb-8">
+      <div>
+        <h1 className="text-2xl font-bold">{title}</h1>
+        {subtitle && (
+          <p className="text-muted-foreground text-sm">{subtitle}</p>
+        )}
+      </div>
+      <div className="flex items-center">
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <button className="p-1" aria-label="Toggle Dark Mode">
+              <ThemeToggle />
+            </button>
+          </TooltipTrigger>
+          <TooltipContent side="left" align="center">
+            Toggle Light/Dark Mode
+          </TooltipContent>
+        </Tooltip>
+      </div>
     </div>
   );
 }

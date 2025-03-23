@@ -1,5 +1,7 @@
 "use client";
 
+import { useState, useEffect } from "react";
+import { useTheme } from "next-themes";
 import {
   Briefcase,
   ChartColumn,
@@ -25,9 +27,9 @@ import {
 
 import Link from "next/link";
 import Image from "next/image";
-import logo from "@/public/svg/findash-logo.svg";
+import logo from "@/public/svg/findash-logo-light.svg"; // Light logo
+import darkLogo from "@/public/svg/findash-logo.svg"; // Dark logo
 
-import { useEffect } from "react";
 import { usePathname } from "next/navigation";
 
 const items = [
@@ -76,19 +78,31 @@ const items = [
 export function AppSidebar() {
   const { setOpenMobile } = useSidebar();
   const pathname = usePathname();
+  const { theme } = useTheme();
 
+  // Avoid hydration issues by rendering only after mount
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  // Close the sidebar on mobile route change
   useEffect(() => {
     if (window.innerWidth < 768) {
       setOpenMobile(false);
     }
   }, [pathname, setOpenMobile]);
 
+  // Determine the logo to use:
+  // If dark mode is active, use the light logo; otherwise use the dark logo.
+  const currentLogo = mounted && theme === "dark" ? logo : darkLogo;
+
   return (
     <Sidebar>
       <SidebarContent>
         <SidebarGroup>
           <SidebarGroupLabel className="mb-8">
-            <Image src={logo} alt="FinDash Logo" width={96} height={24} />
+            <Image src={currentLogo} alt="FinDash Logo" width={96} height={24} />
           </SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>

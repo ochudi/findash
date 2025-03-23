@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useTheme } from "next-themes";
 import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from "recharts";
 import {
   Card,
@@ -83,18 +84,30 @@ const stockData = {
 const chartConfig = {
   desktop: {
     label: "Stock Price",
-    color: "black",
+    color: "black", // This config isn't used in this snippet but can be extended if needed.
   },
 } satisfies ChartConfig;
 
 export function StockChart() {
   const [selectedStock, setSelectedStock] =
     useState<keyof typeof stockData>("AAPL");
-
   const stock = stockData[selectedStock];
   const minPrice = Math.min(...stock.data.map((d) => d.Price));
   const yAxisMin = minPrice - 10;
 
+  // Dark mode support with hydration fix:
+  const { theme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+  if (!mounted) return null;
+
+  // Choose colors based on theme:
+  const strokeColor = theme === "dark" ? "white" : "black";
+  const gradientStopOpacityHigh = theme === "dark" ? 0.8 : 0.8;
+  const gradientStopOpacityLow = theme === "dark" ? 0.1 : 0.1;
+  
   return (
     <Card>
       <CardHeader>
@@ -125,13 +138,13 @@ export function StockChart() {
               </div>
             </CardDescription>
           </div>
-          <div className="flex space-x-1 border p-1 rounded-lg bg-gray-100">
+          <div className="flex space-x-1 border p-1 rounded-lg bg-gray-100 dark:bg-gray-800">
             {Object.keys(stockData).map((key) => (
               <Button
                 key={key}
                 variant={selectedStock === key ? "outline" : "secondary"}
                 onClick={() => setSelectedStock(key as keyof typeof stockData)}
-                className="hover:bg-white px-2 py-1"
+                className="hover:bg-white dark:hover:bg-gray-700 px-2 py-1"
                 size="sm"
               >
                 {key}
@@ -163,14 +176,22 @@ export function StockChart() {
               <ChartTooltip cursor={false} content={<ChartTooltipContent />} />
               <defs>
                 <linearGradient id="fillBlack" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="black" stopOpacity={0.8} />
-                  <stop offset="95%" stopColor="black" stopOpacity={0.1} />
+                  <stop
+                    offset="5%"
+                    stopColor={strokeColor}
+                    stopOpacity={gradientStopOpacityHigh}
+                  />
+                  <stop
+                    offset="95%"
+                    stopColor={strokeColor}
+                    stopOpacity={gradientStopOpacityLow}
+                  />
                 </linearGradient>
               </defs>
               <Area
                 dataKey="Price"
                 type="monotone"
-                stroke="black"
+                stroke={strokeColor}
                 fill="url(#fillBlack)"
                 fillOpacity={0.4}
               />

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import { ThemeProvider } from "@/components/theme-provider";
 import { AppSidebar } from "@/components/app-sidebar";
 import { Toaster } from "@/components/ui/toaster";
 
@@ -15,14 +16,16 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
       <body>
-        <SidebarProvider>
-          <AppSidebar />
-          <main className="w-screen h-screen overflow-hidden">
-            <SidebarTrigger />
-            {children}
-            <Toaster />
-          </main>
-        </SidebarProvider>
+        <ThemeProvider attribute="class" defaultTheme="system">
+          <SidebarProvider>
+            <AppSidebar />
+            <main className="w-screen h-screen overflow-hidden">
+              <SidebarTrigger />
+              {children}
+              <Toaster />
+            </main>
+          </SidebarProvider>
+        </ThemeProvider>
       </body>
     </html>
   );
