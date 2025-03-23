@@ -1,3 +1,8 @@
+"use client";
+
+import { useEffect } from "react";
+import useSWR from "swr";
+import { useToast } from "@/components/hooks/use-toast";
 import {
   Card,
   CardContent,
@@ -7,7 +12,37 @@ import {
 } from "@/components/ui/card";
 import { ArrowDown, ArrowUp } from "lucide-react";
 
+const fetcher = (url: string) => fetch(url).then((res) => res.json());
+
 const Stocks = () => {
+  const { toast } = useToast();
+  const { data, error } = useSWR("/api/stocks", fetcher, {
+    revalidateOnFocus: false,
+  });
+
+  // Transform API response from object to array
+  const stocks = data ? Object.values(data) : [];
+
+  // Single useEffect to handle errors and empty data
+  useEffect(() => {
+    if (error) {
+      toast({
+        title: "API Error",
+        description: "The stock data API appears to be down. Please try again later.",
+        variant: "destructive",
+      });
+    } else if (stocks.length === 0 && data) {
+      toast({
+        title: "No Stock Data",
+        description: "No stock data available. Please try again later.",
+        variant: "destructive",
+      });
+    }
+  }, [error, stocks.length, data, toast]);
+
+  if (!data && error) return <div>Error loading stock data.</div>;
+  if (!data) return <div>Loading...</div>;
+
   return (
     <Card className="md:col-span-3">
       <CardHeader>
@@ -19,56 +54,51 @@ const Stocks = () => {
           <table className="w-full">
             <thead className="bg-table-header text-xs">
               <tr>
-                <th className="text-left p-3 font-medium">Name</th>
-                <th className="text-left p-3 font-medium">Price</th>
-                <th className="text-left p-3 font-medium">Change</th>
-                <th className="text-left p-3 font-medium">% Change</th>
-                <th className="text-left p-3 font-medium">Volume</th>
+                {["Name", "Price", "Change", "% Change", "Volume"].map(
+                  (header) => (
+                    <th
+                      key={header}
+                      className="text-left p-3 font-medium whitespace-nowrap"
+                    >
+                      {header}
+                    </th>
+                  )
+                )}
               </tr>
             </thead>
             <tbody className="divide-y divide-border">
-              <StockRow
-                name="Apple Inc."
-                symbol="AAPL"
-                price="$197.57"
-                change="+$1.23"
-                percentChange="+0.63%"
-                volume="58.7M"
-              />
-              <StockRow
-                name="Microsoft Corporation"
-                symbol="MSFT"
-                price="$392.30"
-                change="+$3.45"
-                percentChange="+0.89%"
-                volume="23.4M"
-              />
-              <StockRow
-                name="Alphabet Inc."
-                symbol="GOOGL"
-                price="$187.57"
-                change="-$0.89"
-                percentChange="-0.47%"
-                volume="19.2M"
-                negative
-              />
-              <StockRow
-                name="Amazon.com, Inc."
-                symbol="AMZN"
-                price="$153.42"
-                change="+$2.31"
-                percentChange="+1.53%"
-                volume="32.1M"
-              />
-              <StockRow
-                name="Tesla, Inc."
-                symbol="TSLA"
-                price="$238.83"
-                change="-$3.76"
-                percentChange="-1.55%"
-                volume="94.3M"
-                negative
-              />
+              {stocks.map((stock: any) => (
+                <StockRow
+                  key={stock.symbol}
+                  name={stock.name || "N/A"}
+                  symbol={stock.symbol || "N/A"}
+                  price={
+                    stock.close
+                      ? `$${Number(stock.close).toFixed(2)}`
+                      : "N/A"
+                  }
+                  change={
+                    stock.change
+                      ? stock.change.startsWith("-")
+                        ? stock.change
+                        : `+${stock.change}`
+                      : "N/A"
+                  }
+                  percentChange={
+                    stock.percent_change
+                      ? stock.percent_change.startsWith("-")
+                        ? stock.percent_change
+                        : `+${stock.percent_change}`
+                      : "N/A"
+                  }
+                  volume={
+                    stock.volume && !isNaN(Number(stock.volume))
+                      ? `${(Number(stock.volume) / 1e6).toFixed(1)}M`
+                      : "N/A"
+                  }
+                  negative={Number(stock.change) < 0}
+                />
+              ))}
             </tbody>
           </table>
         </div>
@@ -84,7 +114,7 @@ const StockRow = ({
   change,
   percentChange,
   volume,
-  negative = false,
+  negative,
 }: {
   name: string;
   symbol: string;
@@ -92,24 +122,20 @@ const StockRow = ({
   change: string;
   percentChange: string;
   volume: string;
-  negative?: boolean;
+  negative: boolean;
 }) => {
   return (
     <tr className="hover:bg-muted/50">
       <td className="p-3">
-        <div className="font-medium w-[160px]">{name}</div>
+        <div className="font-medium">{name}</div>
         <div className="text-xs text-muted-foreground">{symbol}</div>
       </td>
-      <td className="p-3 text-left">{price}</td>
-      <td
-        className={`p-3 text-left ${
-          negative ? "text-red-600" : "text-green-600"
-        }`}
-      >
+      <td className="p-3">{price}</td>
+      <td className={`p-3 ${negative ? "text-red-600" : "text-green-600"}`}>
         {change}
       </td>
       <td
-        className={`p-5 flex gap-1 items-center text-left ${
+        className={`p-3 flex items-center gap-1 ${
           negative ? "text-red-600" : "text-green-600"
         }`}
       >
@@ -120,7 +146,7 @@ const StockRow = ({
         )}
         {percentChange}
       </td>
-      <td className="p-3 text-left">{volume}</td>
+      <td className="p-3">{volume}</td>
     </tr>
   );
 };
