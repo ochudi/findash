@@ -33,6 +33,7 @@ const Watchlist = () => {
     }
   }, [error, toast]);
 
+  if (!data && error) return <div>Error loading stock data.</div>;
   if (!data) return <div>Loading...</div>;
 
   // The stocks API returns an object keyed by stock symbols.
