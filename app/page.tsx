@@ -3,7 +3,7 @@
 import { StockChart } from "@/components/dashboard/chart";
 import Overview from "@/components/dashboard/overview";
 import Watchlist from "@/components/dashboard/watchlist";
-import { HeaderTitle } from "@/components/general/header-title";
+import HeaderTitle from "@/components/general/header-title";
 import type React from "react";
 import Crypto from "@/components/dashboard/crypto";
 import Stocks from "@/components/dashboard/stocks";

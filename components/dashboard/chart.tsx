@@ -32,7 +32,8 @@ export function StockChart() {
     if (error) {
       toast({
         title: "API Error",
-        description: "The stock data API appears to be down. Please try again later.",
+        description:
+          "The stock data API appears to be down. Please try again later.",
         variant: "destructive",
       });
     }
@@ -68,10 +69,10 @@ export function StockChart() {
 
   // Transform data for the chart (using four data points from the stock)
   const chartData = [
-    { month: "Jan", Price: Number(stock.open) },
-    { month: "Feb", Price: Number(stock.high) },
-    { month: "Mar", Price: Number(stock.low) },
-    { month: "Apr", Price: Number(stock.close) },
+    { month: "Dec", Price: Number(stock.open) },
+    { month: "Jan", Price: Number(stock.high) },
+    { month: "Feb", Price: Number(stock.low) },
+    { month: "Mar", Price: Number(stock.close) },
   ];
   const yAxisMin = Math.min(...chartData.map((d) => d.Price)) - 10;
 
@@ -84,19 +85,21 @@ export function StockChart() {
     <Card>
       <CardHeader>
         <div className="flex justify-between items-center flex-col gap-2 lg:flex-row">
-          <div className="flex flex-col gap-1">
+          <div className="flex flex-col gap-1 items-center justify-center md:items-start md:justify-start">
             <CardTitle>{stock.name}</CardTitle>
             <CardDescription>
-              <div className="flex items-center gap-2">
-                <div className="text-lg">${stock.close}</div>
+              <div className="flex items-center justify-center gap-2">
+                <div className="text-lg">${Number(stock.close).toFixed(2)}</div>
                 <span
                   className={`text-sm ${
-                    Number(stock.change) >= 0 ? "text-green-600" : "text-red-600"
+                    Number(stock.change) >= 0
+                      ? "text-green-600"
+                      : "text-red-600"
                   }`}
                 >
                   {Number(stock.change) >= 0
-                    ? `+${stock.change}`
-                    : stock.change}
+                    ? `+${Number(stock.change).toFixed(2)}`
+                    : Number(stock.change).toFixed(2)}
                 </span>
                 <span
                   className={`text-sm ${
@@ -107,8 +110,8 @@ export function StockChart() {
                 >
                   (
                   {Number(stock.percent_change) >= 0
-                    ? `+${stock.percent_change}`
-                    : stock.percent_change}
+                    ? `+${Number(stock.percent_change).toFixed(2)}`
+                    : Number(stock.percent_change).toFixed(2)}
                   %)
                 </span>
               </div>
@@ -119,7 +122,9 @@ export function StockChart() {
               <Button
                 key={key}
                 // @ts-ignore
-                variant={selectedStock === key ? "outline" : "secondary dark:outline"}
+                variant={
+                  selectedStock === key ? "outline" : "secondary dark:outline"
+                }
                 onClick={() => setSelectedStock(key)}
                 className="hover:bg-white dark:hover:bg-gray-700 px-2 py-1"
                 size="sm"
@@ -136,18 +141,45 @@ export function StockChart() {
             config={{ desktop: { label: "Stock Price" } }}
             className="h-full w-full"
           >
-            <AreaChart data={chartData} margin={{ left: -20, right: 20, bottom: 20 }}>
+            <AreaChart
+              data={chartData}
+              margin={{ left: -20, right: 20, bottom: 20 }}
+            >
               <CartesianGrid vertical={true} strokeDasharray="3 3" />
-              <XAxis dataKey="month" tickLine={false} axisLine={false} tickMargin={8} />
-              <YAxis tickLine={false} axisLine={false} tickMargin={8} domain={[yAxisMin, "auto"]} />
+              <XAxis
+                dataKey="month"
+                tickLine={false}
+                axisLine={false}
+                tickMargin={8}
+              />
+              <YAxis
+                tickLine={false}
+                axisLine={false}
+                tickMargin={8}
+                domain={[yAxisMin, "auto"]}
+              />
               <ChartTooltip cursor={false} content={<ChartTooltipContent />} />
               <defs>
                 <linearGradient id="fillBlack" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor={strokeColor} stopOpacity={gradientStopOpacityHigh} />
-                  <stop offset="95%" stopColor={strokeColor} stopOpacity={gradientStopOpacityLow} />
+                  <stop
+                    offset="5%"
+                    stopColor={strokeColor}
+                    stopOpacity={gradientStopOpacityHigh}
+                  />
+                  <stop
+                    offset="95%"
+                    stopColor={strokeColor}
+                    stopOpacity={gradientStopOpacityLow}
+                  />
                 </linearGradient>
               </defs>
-              <Area dataKey="Price" type="monotone" stroke={strokeColor} fill="url(#fillBlack)" fillOpacity={0.4} />
+              <Area
+                dataKey="Price"
+                type="monotone"
+                stroke={strokeColor}
+                fill="url(#fillBlack)"
+                fillOpacity={0.4}
+              />
             </AreaChart>
           </ChartContainer>
         </div>

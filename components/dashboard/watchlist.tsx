@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import useSWR from "swr";
 import {
   Card,
@@ -12,6 +12,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { ArrowDown, ArrowUp, Plus } from "lucide-react";
 import { useToast } from "@/components/hooks/use-toast";
+import WatchlistModal from "@/components/dashboard/modal";
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json());
 
@@ -21,6 +22,8 @@ const allowedWatchlist = ["AAPL", "TSLA", "AMZN", "GOOGL", "MSFT"];
 const Watchlist = () => {
   const { toast } = useToast();
   const { data, error } = useSWR("/api/stocks", fetcher);
+
+  const [isOpen, setIsOpen] = useState(false);
 
   // Show an error toast if there's an error fetching the data
   useEffect(() => {
@@ -84,16 +87,12 @@ const Watchlist = () => {
         <Button
           variant="outline"
           className="w-full flex items-center justify-center gap-1 mt-10"
-          onClick={() => {
-            toast({
-              title: "Watchlist Empty",
-              description: "There's nothing to add yet. Try again later!",
-            });
-          }}
+          onClick={() => setIsOpen(true)}
         >
           <Plus className="h-4 w-4" />
           Add to Watchlist
         </Button>
+        <WatchlistModal isOpen={isOpen} onClose={() => setIsOpen(false)} />
       </CardContent>
     </Card>
   );
