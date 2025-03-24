@@ -102,7 +102,7 @@ export function AppSidebar() {
       <SidebarContent>
         <SidebarGroup>
           <SidebarGroupLabel className="mb-8">
-            <Image src={currentLogo} alt="FinDash Logo" width={96} height={24} />
+            <Image src={currentLogo} alt="FinDash Logo" className="w-auto h-auto mt-5" />
           </SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
