@@ -40,32 +40,30 @@ export const HeaderTitle = ({ title, subtitle }: HeaderTitleProps) => {
         )}
       </div>
       <div className="flex items-center gap-4">
-        {/* Responsive Search */}
         <div className="relative hidden sm:flex w-64 max-sm:w-auto">
           <Search className="absolute left-2 top-2.5 h-5 w-5 text-gray-400" />
           <Input
             type="text"
-            placeholder="Search assets... (⌘ + K)"
+            placeholder="Search assets... [⌘ + K]"
             className="pl-8 hidden md:block"
             onFocus={() => setIsSearchOpen(true)}
             readOnly
           />
-          {/* Medium Screen - Show Button with ⌘K */}
+
           <Button
             variant="outline"
             className="md:hidden px-3 flex items-center gap-2"
             onClick={() => setIsSearchOpen(true)}
           >
-            <Search className="h-4 w-4" />
+            <Search className="h-5 w-5" />
             <span className="hidden sm:block">⌘K</span>
           </Button>
         </div>
 
-        {/* Small Screen - Just a Search Icon Button */}
         <Button
           variant="ghost"
           size="icon"
-          className="sm:hidden"
+          className="flex sm:hidden items-center p-2 justify-center rounded-full bg-gray-200 dark:bg-gray-700 transition-colors duration-300 focus:outline-none"
           onClick={() => setIsSearchOpen(true)}
         >
           <Search className="h-5 w-5" />
