@@ -118,7 +118,8 @@ export function StockChart() {
             {filteredKeys.map((key) => (
               <Button
                 key={key}
-                variant={selectedStock === key ? "outline" : "secondary"}
+                // @ts-ignore
+                variant={selectedStock === key ? "outline" : "secondary dark:outline"}
                 onClick={() => setSelectedStock(key)}
                 className="hover:bg-white dark:hover:bg-gray-700 px-2 py-1"
                 size="sm"
