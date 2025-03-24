@@ -16,7 +16,7 @@ interface HeaderTitleProps {
   subtitle?: string;
 }
 
-const HeaderTitle = ({ title, subtitle }: HeaderTitleProps) => {
+export const HeaderTitle = ({ title, subtitle }: HeaderTitleProps) => {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
 
   useEffect(() => {
@@ -72,5 +72,6 @@ const HeaderTitle = ({ title, subtitle }: HeaderTitleProps) => {
     </div>
   );
 };
+
 
 export default HeaderTitle;
