@@ -1,3 +1,5 @@
+"use client";
+
 import { useState, useEffect } from "react";
 import { ThemeToggle } from "../theme-toggle";
 import {
@@ -32,7 +34,9 @@ const HeaderTitle = ({ title, subtitle }: HeaderTitleProps) => {
     <div className="flex justify-between items-center mb-8">
       <div>
         <h1 className="text-2xl font-bold">{title}</h1>
-        {subtitle && <p className="text-muted-foreground text-sm">{subtitle}</p>}
+        {subtitle && (
+          <p className="text-muted-foreground text-sm">{subtitle}</p>
+        )}
       </div>
       <div className="flex items-center gap-4">
         {/* Search Bar */}
@@ -46,7 +50,7 @@ const HeaderTitle = ({ title, subtitle }: HeaderTitleProps) => {
             readOnly
           />
         </div>
-        
+
         {/* Theme Toggle */}
         <Tooltip>
           <TooltipTrigger asChild>
@@ -57,9 +61,14 @@ const HeaderTitle = ({ title, subtitle }: HeaderTitleProps) => {
           </TooltipContent>
         </Tooltip>
       </div>
-      
+
       {/* Search Modal */}
-      {isSearchOpen && <SearchModal isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} />}
+      {isSearchOpen && (
+        <SearchModal
+          isOpen={isSearchOpen}
+          onClose={() => setIsSearchOpen(false)}
+        />
+      )}
     </div>
   );
 };
