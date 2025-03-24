@@ -20,47 +20,45 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "../ui/dropdown-menu";
+} from "@/components/ui/dropdown-menu";
 
 const assets = [
   {
     name: "Apple Inc.",
     symbol: "AAPL",
-    price: "$218.27",
-    change: "+4.17000",
-    currency: "USD",
+    price: 218.27,
+    change: 4.17,
   },
   {
     name: "Microsoft Corp.",
     symbol: "MSFT",
-    price: "$391.26",
-    change: "+4.42001",
-    currency: "USD",
+    price: 391.26,
+    change: 4.42,
   },
   {
     name: "Alphabet Inc.",
     symbol: "GOOGL",
-    price: "$163.99",
-    change: "+1.19000",
-    currency: "USD",
+    price: 163.99,
+    change: 1.19,
   },
 ];
+
+const currencyRates: Record<string, number> = {
+  USD: 1,
+  EUR: 0.92,
+  GBP: 0.78,
+};
+
+const currencySymbols: Record<string, string> = {
+  USD: "$",
+  EUR: "€",
+  GBP: "£",
+};
 
 interface SearchModalProps {
   isOpen: boolean;
   onClose: () => void;
 }
-
-const formatPrice = (price: string, currency: string) => {
-  const numericPrice = parseFloat(price.replace(/[^0-9.]/g, ""));
-  const currencySymbols: Record<string, string> = {
-    USD: "$",
-    EUR: "€",
-    GBP: "£",
-  };
-
-  return `${currencySymbols[currency] || ""}${numericPrice.toFixed(2)}`;
-};
 
 const SearchModal: React.FC<SearchModalProps> = ({ isOpen, onClose }) => {
   const [search, setSearch] = useState("");
@@ -89,58 +87,62 @@ const SearchModal: React.FC<SearchModalProps> = ({ isOpen, onClose }) => {
           />
         </div>
         <div className="space-y-2">
-          {filteredAssets.map(({ name, symbol, price, change, currency }) => (
-            <div
-              key={symbol}
-              className="flex justify-between items-center p-2 border rounded-lg"
-            >
-              <div>
-                <div className="font-medium">{name}</div>
-                <div className="text-xs text-muted-foreground">{symbol}</div>
-                <div className="text-sm text-green-600">
-                  {formatPrice(price, currency)}
+          {filteredAssets.map(({ name, symbol, price, change }) => {
+            const convertedPrice = (price * currencyRates[currency]).toFixed(2);
+            const formattedChange = change.toFixed(2);
+            return (
+              <div
+                key={symbol}
+                className="flex justify-between items-center p-2 border rounded-lg"
+              >
+                <div>
+                  <div className="font-medium">{name}</div>
+                  <div className="text-xs text-muted-foreground">{symbol}</div>
+                  <div className="text-sm text-green-600">
+                    {currencySymbols[currency]}
+                    {convertedPrice}
+                  </div>
+                </div>
+                <div className="flex gap-2">
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button variant="ghost" size="icon">
+                        <Eye className="w-4 h-4" />
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>View Asset</TooltipContent>
+                  </Tooltip>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button variant="ghost" size="icon">
+                        <Scale className="w-4 h-4" />
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>Compare Asset</TooltipContent>
+                  </Tooltip>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="ghost" size="icon">
+                        <Coins className="w-4 h-4" />
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                      <DropdownMenuLabel>Select Currency</DropdownMenuLabel>
+                      <DropdownMenuSeparator />
+                      {Object.keys(currencyRates).map((curr) => (
+                        <DropdownMenuItem
+                          key={curr}
+                          onClick={() => setCurrency(curr)}
+                        >
+                          {curr} ({currencySymbols[curr]})
+                        </DropdownMenuItem>
+                      ))}
+                    </DropdownMenuContent>
+                  </DropdownMenu>
                 </div>
               </div>
-              <div className="flex gap-2">
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Button variant="ghost" size="icon">
-                      <Eye className="w-4 h-4" />
-                    </Button>
-                  </TooltipTrigger>
-                  <TooltipContent>View Asset</TooltipContent>
-                </Tooltip>
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <Button variant="ghost" size="icon">
-                      <Scale className="w-4 h-4" />
-                    </Button>
-                  </TooltipTrigger>
-                  <TooltipContent>Compare Asset</TooltipContent>
-                </Tooltip>
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button variant="outline" size="icon">
-                      <Coins className="w-4 h-4" />
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end">
-                    <DropdownMenuLabel>Change Currency</DropdownMenuLabel>
-                    <DropdownMenuSeparator />
-                    <DropdownMenuItem onClick={() => setCurrency("USD")}>
-                      USD ($)
-                    </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => setCurrency("EUR")}>
-                      EUR (€)
-                    </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => setCurrency("GBP")}>
-                      GBP (£)
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </DialogContent>
     </Dialog>
