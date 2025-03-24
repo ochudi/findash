@@ -16,7 +16,7 @@ export default function Home() {
         <div className="p-6">
           <HeaderTitle
             title="Financial Dashboard"
-            subtitle="Track stocks and cryptocurrencies in real-time."
+            subtitle="Track stocks and cryptocurrencies."
           />
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className="flex flex-col md:col-span-2 gap-2">

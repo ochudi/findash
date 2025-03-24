@@ -7,7 +7,7 @@ export async function GET() {
   const res = await fetch(
     `${baseUrl}/quote?symbol=${symbols}&apikey=${apiKey}`,
     {
-      next: { revalidate: 60 }, // cache for 60 seconds
+      next: { revalidate: 3600 }, // cache for 60 seconds
     }
   );
 

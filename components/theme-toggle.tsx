@@ -22,7 +22,7 @@ export function ThemeToggle() {
     <button
       onClick={() => setTheme(currentTheme === "dark" ? "light" : "dark")}
       aria-label="Toggle Dark Mode"
-      className="flex items-center justify-center p-2 rounded-full bg-gray-200 dark:bg-gray-700 transition-colors duration-300 focus:outline-none"
+      className="flex items-center justify-center p-2.5 rounded-full bg-gray-200 dark:bg-gray-700 transition-colors duration-300 focus:outline-none"
     >
       {currentTheme === "dark" ? (
         <Sun className="w-5 h-5 text-yellow-500" />
