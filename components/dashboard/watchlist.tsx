@@ -1,4 +1,7 @@
-import React from "react";
+"use client";
+
+import React, { useEffect } from "react";
+import useSWR from "swr";
 import {
   Card,
   CardContent,
@@ -10,8 +13,39 @@ import { Button } from "@/components/ui/button";
 import { ArrowDown, ArrowUp, Plus } from "lucide-react";
 import { useToast } from "@/components/hooks/use-toast";
 
+const fetcher = (url: string) => fetch(url).then((res) => res.json());
+
+// Only allow these stock symbols in the watchlist
+const allowedWatchlist = ["AAPL", "TSLA", "AMZN", "GOOGL", "MSFT"];
+
 const Watchlist = () => {
   const { toast } = useToast();
+  const { data, error } = useSWR("/api/stocks", fetcher);
+
+  // Show an error toast if there's an error fetching the data
+  useEffect(() => {
+    if (error) {
+      toast({
+        title: "API Error",
+        description: "The stock data API appears to be down. Please try again later.",
+        variant: "destructive",
+      });
+    }
+  }, [error, toast]);
+
+  if (!data && error) return <div>Error loading stock data.</div>;
+  if (!data) return <div>Loading...</div>;
+
+  // The stocks API returns an object keyed by stock symbols.
+  const stocks = data || {};
+
+  // Filter to only include allowed watchlist stocks.
+  const watchlistStocks = Object.keys(stocks)
+    .filter((key) => allowedWatchlist.includes(key))
+    .reduce((acc, key) => {
+      acc[key] = stocks[key];
+      return acc;
+    }, {} as Record<string, any>);
 
   return (
     <Card>
@@ -21,37 +55,30 @@ const Watchlist = () => {
       </CardHeader>
       <CardContent className="m-1">
         <div className="space-y-4">
-          <WatchlistItem
-            name="Apple Inc."
-            symbol="AAPL"
-            price="$197.57"
-            change="+0.63%"
-          />
-          <WatchlistItem
-            name="Tesla, Inc."
-            symbol="TSLA"
-            price="$238.83"
-            change="-1.55%"
-            negative
-          />
-          <WatchlistItem
-            name="Bitcoin"
-            symbol="BTC"
-            price="$42,637.30"
-            change="+2.14%"
-          />
-          <WatchlistItem
-            name="Ethereum"
-            symbol="ETH"
-            price="$2,274.16"
-            change="+1.87%"
-          />
-          <WatchlistItem
-            name="Amazon.com, Inc."
-            symbol="AMZN"
-            price="$153.42"
-            change="+1.53%"
-          />
+          {Object.keys(watchlistStocks).map((symbol) => {
+            const stock = watchlistStocks[symbol];
+            // Use the "close" price as the current price
+            const price = stock.close
+              ? `$${Number(stock.close).toFixed(2)}`
+              : "N/A";
+            const change =
+              stock.change !== undefined
+                ? Number(stock.change) >= 0
+                  ? `+${stock.change}`
+                  : stock.change
+                : "N/A";
+            const negative = Number(stock.change) < 0;
+            return (
+              <WatchlistItem
+                key={symbol}
+                name={stock.name}
+                symbol={stock.symbol}
+                price={price}
+                change={change}
+                negative={negative}
+              />
+            );
+          })}
         </div>
 
         <Button
@@ -72,7 +99,7 @@ const Watchlist = () => {
   );
 };
 
-function WatchlistItem({
+const WatchlistItem = ({
   name,
   symbol,
   price,
@@ -84,30 +111,24 @@ function WatchlistItem({
   price: string;
   change: string;
   negative?: boolean;
-}) {
-  return (
-    <div className="flex justify-between items-center">
-      <div>
-        <div className="font-medium">{name}</div>
-        <div className="text-xs text-muted-foreground">{symbol}</div>
-      </div>
-      <div className="text-right">
-        <div className="font-medium">{price}</div>
-        <div
-          className={`flex justify-end items-center text-xs text-right gap-1 ${
-            negative ? "text-red-600" : "text-green-600"
-          }`}
-        >
-          {negative ? (
-            <ArrowDown className="h-3 w-3" />
-          ) : (
-            <ArrowUp className="h-3 w-3" />
-          )}
-          {change}
-        </div>
+}) => (
+  <div className="flex justify-between items-center">
+    <div>
+      <div className="font-medium">{name}</div>
+      <div className="text-xs text-muted-foreground">{symbol}</div>
+    </div>
+    <div className="text-right">
+      <div className="font-medium">{price}</div>
+      <div
+        className={`flex justify-end items-center text-xs gap-1 ${
+          negative ? "text-red-600" : "text-green-600"
+        }`}
+      >
+        {negative ? <ArrowDown className="h-3 w-3" /> : <ArrowUp className="h-3 w-3" />}
+        {change}
       </div>
     </div>
-  );
-}
+  </div>
+);
 
 export default Watchlist;
